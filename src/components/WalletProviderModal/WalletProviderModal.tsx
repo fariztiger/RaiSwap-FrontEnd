@@ -13,6 +13,7 @@ import ModalTitle from '../ModalTitle'
 import Spacer from '../Spacer'
 
 import WalletCard from './components/WalletCard'
+import { getWeb3 } from '../../rai/Rai'
 
 const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss }) => {
   const { account, connect } = useWallet()
@@ -32,7 +33,15 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss }) => {
           <StyledWalletCard>
             <WalletCard
               icon={<img src={metamaskLogo} style={{ height: 32 }} />}
-              onConnect={() => connect('injected')}
+              onConnect={async () => {
+                console.log('Called onConnect!')
+                try {
+                  const result = await getWeb3()
+                  console.log(result)
+                } catch (err) {
+                  console.error(err)
+                }
+              }}
               title="Metamask"
             />
           </StyledWalletCard>
