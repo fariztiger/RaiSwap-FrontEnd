@@ -14,6 +14,7 @@ import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
 const Farm: React.FC = () => {
+  // @ts-ignore
   const { farmId } = useParams()
   const {
     pid,
