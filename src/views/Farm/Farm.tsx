@@ -8,12 +8,13 @@ import Spacer from '../../components/Spacer'
 import useFarm from '../../hooks/useFarm'
 import useRedeem from '../../hooks/useRedeem'
 import useSushi from '../../hooks/useSushi'
-import { getMasterChefContract } from '../../sushi/utils'
+import { getMasterChefContract } from '../../rai/utils'
 import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
 const Farm: React.FC = () => {
+  // @ts-ignore
   const { farmId } = useParams()
   const {
     pid,

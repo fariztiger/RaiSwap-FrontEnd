@@ -8,7 +8,7 @@ import TopBar from './components/TopBar'
 import FarmsProvider from './contexts/Farms'
 import ModalsProvider from './contexts/Modals'
 import TransactionProvider from './contexts/Transactions'
-import SushiProvider from './contexts/SushiProvider'
+import RaiProvider from './contexts/RaiProvider'
 import useModal from './hooks/useModal'
 import theme from './theme'
 import Farms from './views/Farms'
@@ -57,13 +57,13 @@ const Providers: React.FC = ({ children }) => {
           walletconnect: { rpcUrl: 'https://eth1.chserver.net/rpc/' },
         }}
       >
-        <SushiProvider>
+        <RaiProvider>
           <TransactionProvider>
             <FarmsProvider>
               <ModalsProvider>{children}</ModalsProvider>
             </FarmsProvider>
           </TransactionProvider>
-        </SushiProvider>
+        </RaiProvider>
       </UseWalletProvider>
     </ThemeProvider>
   )
@@ -83,7 +83,7 @@ const Disclaimer: React.FC = () => {
     if (!seenDisclaimer) {
       onPresentDisclaimerModal()
     }
-  }, [])
+  }, [onPresentDisclaimerModal])
 
   return <div />
 }

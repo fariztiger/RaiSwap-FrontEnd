@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import { Context } from '../contexts/SushiProvider'
+import { Context } from '../contexts/RaiProvider'
 
 const useSushi = () => {
-  const { sushi } = useContext(Context)
-  return sushi
+  const { rai } = useContext(Context)
+  return rai
 }
 
 export default useSushi
