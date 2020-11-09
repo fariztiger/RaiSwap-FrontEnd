@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import chef from '../../assets/img/chef.png'
 
@@ -23,12 +23,13 @@ import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
 const Farm: React.FC = () => {
-  const { account } = useWallet()
+  const [account, setAccount] = useState(null)
   const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+  if (account == null) setAccount(localStorage.getItem('userAccount'))
 
   const sushi = useSushi()
   const { ethereum } = useWallet()

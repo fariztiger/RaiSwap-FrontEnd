@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
 import useTokenBalance from '../../../hooks/useTokenBalance'
@@ -16,11 +16,15 @@ import Spacer from '../../Spacer'
 import Value from '../../Value'
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
-  const { account, reset } = useWallet()
+  const { reset } = useWallet()
+  const [account, setAccount] = useState(null)
+  if (account == null) setAccount(localStorage.getItem('userAccount'))
 
   const handleSignOutClick = useCallback(() => {
     onDismiss!()
     reset()
+    localStorage.setItem('userAccount', null)
+    localStorage.setItem('userEthBalance', null)
   }, [onDismiss, reset])
 
   const sushi = useSushi()
