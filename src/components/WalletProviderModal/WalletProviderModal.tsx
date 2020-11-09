@@ -39,6 +39,7 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss }) => {
                   const result = await getWeb3()
                   console.log(result)
                 } catch (err) {
+                  // MARK: Print error when an err occurred.
                   console.error(err)
                 }
               }}
