@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
-import { UseWalletProvider } from 'use-wallet'
+import {useWallet, UseWalletProvider} from 'use-wallet'
 import { CookiesProvider } from 'react-cookie'
 import DisclaimerModal from './components/DisclaimerModal'
 import MobileMenu from './components/MobileMenu'
@@ -58,9 +58,9 @@ const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <UseWalletProvider
-        chainId={1}
+        chainId={88}
         connectors={{
-          walletconnect: { rpcUrl: 'https://eth1.chserver.net/rpc/' },
+          walletconnect: { rpcUrl: 'https://eth1.chserver.net/' },
         }}
       >
         <RaiProvider>

@@ -46,6 +46,9 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
     }
   }, [onPresentWalletProviderModal])
 
+  console.log(useWallet())
+
+
   console.log(`AccountButton.tsx -> account =>`, account, typeof account)
   return (
     <StyledAccountButton>
