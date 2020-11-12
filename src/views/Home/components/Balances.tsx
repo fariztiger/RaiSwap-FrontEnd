@@ -16,6 +16,8 @@ import useTokenBalance from '../../../hooks/useTokenBalance'
 import useSushi from '../../../hooks/useSushi'
 import { getSushiAddress, getSushiSupply } from '../../../rai/utils'
 import { getBalanceNumber } from '../../../utils/formatBalance'
+import { getAccount, getBalance } from '../../../rai/Rai'
+import { useCookies } from 'react-cookie'
 
 const PendingRewards: React.FC = () => {
   const [start, setStart] = useState(0)
@@ -71,9 +73,24 @@ const PendingRewards: React.FC = () => {
 
 const Balances: React.FC = () => {
   const [totalSupply, setTotalSupply] = useState<BigNumber>()
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
+  const [account, setAccount] = useState(null)
+  const [ethereum, setEthereum] = useState(null)
+
   const sushi = useSushi()
   const sushiBalance = useTokenBalance(getSushiAddress(sushi))
-  const { account, ethereum }: { account: any; ethereum: any } = useWallet()
+
+  // const account: string | null = localStorage.getItem('userAccount')
+  // const ethereum: string | null = localStorage.getItem('userEthBalance')
+  useEffect(() => {
+    if (ethereum === undefined || cookies['userEthBalance'])
+      setEthereum(cookies['userEthBalance'])
+  }, [ethereum, cookies])
+
+  useEffect(() => {
+    if (account === undefined || cookies['userAccount'])
+      setAccount(cookies['userAccount'])
+  }, [account, cookies])
 
   useEffect(() => {
     async function fetchTotalSupply() {
@@ -85,6 +102,7 @@ const Balances: React.FC = () => {
     }
   }, [sushi, setTotalSupply])
 
+  console.log(`account ==>`, account, typeof account)
   return (
     <StyledWrapper>
       <Card>
@@ -94,9 +112,9 @@ const Balances: React.FC = () => {
               <SushiIcon />
               <Spacer />
               <div style={{ flex: 1 }}>
-                <Label text="Your SUSHI Balance" />
+                <Label text="Your RAI Balance" />
                 <Value
-                  value={!!account ? getBalanceNumber(sushiBalance) : 'Locked'}
+                  value={account ? getBalanceNumber(sushiBalance) : 'Locked'}
                 />
               </div>
             </StyledBalance>
@@ -105,7 +123,7 @@ const Balances: React.FC = () => {
         <Footnote>
           Pending harvest
           <FootnoteValue>
-            <PendingRewards /> SUSHI
+            <PendingRewards /> RAI
           </FootnoteValue>
         </Footnote>
       </Card>
@@ -113,14 +131,14 @@ const Balances: React.FC = () => {
 
       <Card>
         <CardContent>
-          <Label text="Total SUSHI Supply" />
+          <Label text="Total RAI Supply" />
           <Value
             value={totalSupply ? getBalanceNumber(totalSupply) : 'Locked'}
           />
         </CardContent>
         <Footnote>
           New rewards per block
-          <FootnoteValue>1,000 SUSHI</FootnoteValue>
+          <FootnoteValue>1,000 RAI</FootnoteValue>
         </Footnote>
       </Card>
     </StyledWrapper>

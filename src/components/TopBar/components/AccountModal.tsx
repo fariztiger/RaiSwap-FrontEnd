@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
 import useTokenBalance from '../../../hooks/useTokenBalance'
@@ -14,13 +14,22 @@ import ModalContent from '../../ModalContent'
 import ModalTitle from '../../ModalTitle'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
+import { useCookies } from 'react-cookie'
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
-  const { account, reset } = useWallet()
+  const { reset } = useWallet()
+  const [account, setAccount] = useState(null)
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
+  if (account == null) setAccount(localStorage.getItem('userAccount'))
 
   const handleSignOutClick = useCallback(() => {
     onDismiss!()
     reset()
+
+    for (let key in Object.keys(cookies)) {
+      removeCookie(key)
+    }
+    setAccount(undefined)
   }, [onDismiss, reset])
 
   const sushi = useSushi()
