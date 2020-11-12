@@ -78,15 +78,15 @@ export class Rai {
   }
 }
 
+let account = null
+let balance = null
+
 export const getWeb3 = async () => {
   const web3js = window.web3
-  console.log(`[1]`);
   if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
     let data = {}
-    console.log(`[2]`);
     // MARK: Connect with Metamask
     // Stage 01 : Initializing Metamask. (== Requesting to connect on Metamask)
-    console.log(`Stage 01...`);
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum)
       try {
@@ -112,28 +112,37 @@ export const getWeb3 = async () => {
       }
     }
     // Stage 02 : Get current network's networkId.
-    console.log(`Stage 02...`);
     try {
       data.networkId = await data.web3().eth.net.getId()
     } catch (err) {
       throw new Error('Unable to retrieve networkID')
     }
     // Stage 03 : Get Coinbase WalletID.
-    console.log(`Stage 03...`);
     try {
       data.coinbase = await data.web3().eth.getCoinbase()
+      setAccount(data.coinbase)
     } catch (err) {
       throw new Error('Unable to retrieve coinbase')
     }
     // Stage 04 : Get Balance of the Coinbase in Current Network.
-    console.log(`Stage 04...`);
     try {
       data.balance = await data.web3().eth.getBalance(data.coinbase)
+      balance = data.balance
+      setBalance(data.balance)
     } catch (err) {
       throw new Error(
         'Unable to retrieve balance for address: ' + data.coinbase,
       )
     }
-    return data;
+    return data
   } else throw new Error('Unable to connect to Metamask')
+}
+
+export const getAccount = () => account
+export const setAccount = (_account) => {
+  account = _account
+}
+export const getBalance = () => balance
+export const setBalance = (_balance) => {
+  balance = _balance
 }

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
+import { CookiesProvider } from 'react-cookie'
 import DisclaimerModal from './components/DisclaimerModal'
 import MobileMenu from './components/MobileMenu'
 import TopBar from './components/TopBar'
@@ -28,22 +29,27 @@ const App: React.FC = () => {
 
   return (
     <Providers>
-      <Router>
-        <TopBar onPresentMobileMenu={handlePresentMobileMenu} />
-        <MobileMenu onDismiss={handleDismissMobileMenu} visible={mobileMenu} />
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/farms">
-            <Farms />
-          </Route>
-          <Route path="/staking">
-            <Stake />
-          </Route>
-        </Switch>
-      </Router>
-      <Disclaimer />
+      <CookiesProvider>
+        <Router>
+          <TopBar onPresentMobileMenu={handlePresentMobileMenu} />
+          <MobileMenu
+            onDismiss={handleDismissMobileMenu}
+            visible={mobileMenu}
+          />
+          <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/farms">
+              <Farms />
+            </Route>
+            <Route path="/staking">
+              <Stake />
+            </Route>
+          </Switch>
+        </Router>
+        <Disclaimer />
+      </CookiesProvider>
     </Providers>
   )
 }

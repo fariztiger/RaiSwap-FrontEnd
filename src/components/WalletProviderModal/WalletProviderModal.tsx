@@ -13,10 +13,11 @@ import ModalTitle from '../ModalTitle'
 import Spacer from '../Spacer'
 
 import WalletCard from './components/WalletCard'
-import { getWeb3 } from '../../rai/Rai'
+import { getAccount, getWeb3 } from '../../rai/Rai'
 
 const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss }) => {
-  const { account, connect } = useWallet()
+  // const { account, connect } = useWallet()
+  const account = getAccount()
 
   useEffect(() => {
     if (account) {
@@ -46,14 +47,14 @@ const WalletProviderModal: React.FC<ModalProps> = ({ onDismiss }) => {
               title="Metamask"
             />
           </StyledWalletCard>
-          <Spacer size="sm" />
-          <StyledWalletCard>
-            <WalletCard
-              icon={<img src={walletConnectLogo} style={{ height: 24 }} />}
-              onConnect={() => connect('walletconnect')}
-              title="WalletConnect"
-            />
-          </StyledWalletCard>
+          {/*  <Spacer size="sm" />*/}
+          {/*  <StyledWalletCard>*/}
+          {/*    <WalletCard*/}
+          {/*      icon={<img src={walletConnectLogo} style={{ height: 24 }} />}*/}
+          {/*      onConnect={() => connect('walletconnect')}*/}
+          {/*      title="WalletConnect"*/}
+          {/*    />*/}
+          {/*  </StyledWalletCard>*/}
         </StyledWalletsWrapper>
       </ModalContent>
 

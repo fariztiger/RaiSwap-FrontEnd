@@ -14,15 +14,17 @@ import useModal from '../../hooks/useModal'
 import Farm from '../Farm'
 
 import FarmCards from './components/FarmCards'
+import { useCookies } from 'react-cookie'
 
 const Farms: React.FC = () => {
   const { path } = useRouteMatch()
-  const { account } = useWallet()
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
+  const account = cookies['userAccount']
   const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />)
   return (
     <Switch>
       <Page>
-        {!!account ? (
+        {account ? (
           <>
             <Route exact path={path}>
               <PageHeader
