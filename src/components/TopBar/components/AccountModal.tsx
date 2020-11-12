@@ -14,17 +14,22 @@ import ModalContent from '../../ModalContent'
 import ModalTitle from '../../ModalTitle'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
+import { useCookies } from 'react-cookie'
 
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
   const { reset } = useWallet()
   const [account, setAccount] = useState(null)
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
   if (account == null) setAccount(localStorage.getItem('userAccount'))
 
   const handleSignOutClick = useCallback(() => {
     onDismiss!()
     reset()
-    localStorage.setItem('userAccount', null)
-    localStorage.setItem('userEthBalance', null)
+
+    for (let key in Object.keys(cookies)) {
+      removeCookie(key)
+    }
+    setAccount(undefined)
   }, [onDismiss, reset])
 
   const sushi = useSushi()

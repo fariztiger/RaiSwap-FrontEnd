@@ -17,6 +17,7 @@ import useSushi from '../../../hooks/useSushi'
 import { getSushiAddress, getSushiSupply } from '../../../rai/utils'
 import { getBalanceNumber } from '../../../utils/formatBalance'
 import { getAccount, getBalance } from '../../../rai/Rai'
+import { useCookies } from 'react-cookie'
 
 const PendingRewards: React.FC = () => {
   const [start, setStart] = useState(0)
@@ -72,13 +73,24 @@ const PendingRewards: React.FC = () => {
 
 const Balances: React.FC = () => {
   const [totalSupply, setTotalSupply] = useState<BigNumber>()
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
+  const [account, setAccount] = useState(null)
+  const [ethereum, setEthereum] = useState(null)
+
   const sushi = useSushi()
   const sushiBalance = useTokenBalance(getSushiAddress(sushi))
-  // const account: string | null = localStorage.getItem('userAccount')
-  const ethereum: string | null = localStorage.getItem('userEthBalance')
 
-  const [account, setAccount] = useState(null)
-  if (account == null) setAccount(localStorage.getItem('userAccount'))
+  // const account: string | null = localStorage.getItem('userAccount')
+  // const ethereum: string | null = localStorage.getItem('userEthBalance')
+  useEffect(() => {
+    if (ethereum === undefined || cookies['userEthBalance'])
+      setEthereum(cookies['userEthBalance'])
+  }, [ethereum, cookies])
+
+  useEffect(() => {
+    if (account === undefined || cookies['userAccount'])
+      setAccount(cookies['userAccount'])
+  }, [account, cookies])
 
   useEffect(() => {
     async function fetchTotalSupply() {
@@ -90,7 +102,7 @@ const Balances: React.FC = () => {
     }
   }, [sushi, setTotalSupply])
 
-  console.log(`account ==>`, account)
+  console.log(`account ==>`, account, typeof account)
   return (
     <StyledWrapper>
       <Card>
@@ -102,9 +114,7 @@ const Balances: React.FC = () => {
               <div style={{ flex: 1 }}>
                 <Label text="Your RAI Balance" />
                 <Value
-                  value={
-                    account != null ? getBalanceNumber(sushiBalance) : 'Locked'
-                  }
+                  value={account ? getBalanceNumber(sushiBalance) : 'Locked'}
                 />
               </div>
             </StyledBalance>

@@ -5,7 +5,8 @@ import useModal from '../../../hooks/useModal'
 import Button from '../../Button'
 import WalletProviderModal from '../../WalletProviderModal'
 import AccountModal from './AccountModal'
-import { getAccount, getBalance, getWeb3 } from '../../../rai/Rai'
+import { getAccount, getWeb3 } from '../../../rai/Rai'
+import { useCookies } from 'react-cookie'
 
 interface AccountButtonProps {}
 
@@ -15,16 +16,14 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
     <WalletProviderModal />,
     'provider',
   )
-  const [account, setAccount] = useState(null)
+  const [account, setAccount] = useState(undefined)
+  const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
 
-  useEffect(() => {
-    function fetchAccount() {
-      const account = localStorage.getItem('userAccount')
-      setAccount(account)
-    }
-
-    fetchAccount()
-  })
+  // useEffect(() => {
+  //   if (!cookies.hasOwnProperty('userAccount')) setCookie('userAccount', null)
+  //   if (!cookies.hasOwnProperty('userEthBalance'))
+  //     setCookie('userEthBalance', null)
+  // }, [cookies, setCookie])
 
   const handleUnlockClick = useCallback(async () => {
     // onPresentWalletProviderModal()
@@ -39,16 +38,18 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
       console.log(JSON.stringify(result))
       // setAccount(result.coinbase)
       setAccount(() => result.coinbase)
-      localStorage.setItem('userAccount', result.coinbase)
-      localStorage.setItem('userEthBalance', result.balance)
+      setCookie('userAccount', result.coinbase)
+      setCookie('userEthBalance', result.balance)
     } catch (err) {
       // MARK: Print error when an err occurred.
       console.error(err)
     }
   }, [onPresentWalletProviderModal])
+
+  console.log(`AccountButton.tsx -> account =>`, account, typeof account)
   return (
     <StyledAccountButton>
-      {account == null ? (
+      {account === undefined ? (
         <Button onClick={handleUnlockClick} size="sm" text="Unlock Wallet" />
       ) : (
         // <Button
