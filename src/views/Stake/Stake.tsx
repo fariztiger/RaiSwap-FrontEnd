@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import chef from '../../assets/img/chef.png'
 
 import { useParams } from 'react-router-dom'
-import { useWallet } from 'use-wallet'
+import { useWallet, UseWalletProvider } from 'use-wallet'
 import { provider } from 'web3-core'
 
 import Page from '../../components/Page'
@@ -25,43 +25,21 @@ import { getWeb3 } from '../../rai/Rai'
 import { useCookies } from 'react-cookie'
 
 const Farm: React.FC = () => {
-  const [account, setAccount] = useState(undefined)
+  const wallet = useWallet()
+  const blockNumber = wallet.getBlockNumber()
   const [cookies, setCookie, removeCookie] = useCookies(['userAccount'])
   const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-  useEffect(() => {
-    setAccount(cookies['userAccount'])
-  })
   // if (account === undefined) setAccount(cookies['userAccount'])
 
   const sushi = useSushi()
-  const handleUnlockClick = useCallback(async () => {
-    // onPresentWalletProviderModal()
-    console.log('Called handleUnlockClick()!')
-    try {
-      // @ts-ignore
-      const result: {
-        networkId: number
-        coinbase: string
-        balance: string
-      } = await getWeb3()
-      console.log(JSON.stringify(result))
-      // setAccount(result.coinbase)
-      setAccount(() => result.coinbase)
-      setCookie('userAccount', result.coinbase)
-      setCookie('userEthBalance', result.balance)
-    } catch (err) {
-      // MARK: Print error when an err occurred.
-      console.error(err)
-    }
-  }, [onPresentWalletProviderModal])
 
   return (
     <Page>
-      {account ? (
+      {wallet.account != null ? (
         <>
           <PageHeader
             icon={<img src={chef} height="120" />}
@@ -80,7 +58,12 @@ const Farm: React.FC = () => {
             justifyContent: 'center',
           }}
         >
-          <Button onClick={handleUnlockClick} text="🔓 Unlock Wallet" />
+          <Button
+            onClick={async () => {
+              await wallet.connect('injected')
+            }}
+            text="🔓 Unlock Wallet"
+          />
         </div>
       )}
     </Page>

@@ -26,25 +26,28 @@ const AccountButton: React.FC<AccountButtonProps> = (props) => {
   // }, [cookies, setCookie])
 
   const handleUnlockClick = useCallback(async () => {
-    // onPresentWalletProviderModal()
+    onPresentWalletProviderModal()
     console.log('Called handleUnlockClick()!')
-    try {
-      // @ts-ignore
-      const result: {
-        networkId: number
-        coinbase: string
-        balance: string
-      } = await getWeb3()
-      console.log(JSON.stringify(result))
+    // try {
+    //   @ts-ignore
+      // const result: {
+      //   networkId: number
+      //   coinbase: string
+      //   balance: string
+      // } = await getWeb3()
+      // console.log(JSON.stringify(result))
       // setAccount(result.coinbase)
-      setAccount(() => result.coinbase)
-      setCookie('userAccount', result.coinbase)
-      setCookie('userEthBalance', result.balance)
-    } catch (err) {
-      // MARK: Print error when an err occurred.
-      console.error(err)
-    }
+      // setAccount(() => result.coinbase)
+      // setCookie('userAccount', result.coinbase)
+      // setCookie('userEthBalance', result.balance)
+    // } catch (err) {
+    //   MARK: Print error when an err occurred.
+      // console.error(err)
+    // }
   }, [onPresentWalletProviderModal])
+
+  console.log(useWallet())
+
 
   console.log(`AccountButton.tsx -> account =>`, account, typeof account)
   return (
